@@ -1,0 +1,35 @@
+{
+  "name": "vortex-studio-luau-docs",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "content": "node scripts/build-content.mjs",
+    "validate": "node scripts/build-content.mjs --check",
+    "verify:migration": "node scripts/build-content.mjs --check --migration",
+    "dev": "npm run content && vite",
+    "build": "npm run content && tsc --noEmit && vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 4173",
+    "lint": "oxlint app scripts",
+    "format": "oxfmt"
+  },
+  "dependencies": {
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "6.0.2",
+    "@types/node": "22.19.19",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "marked": "18.0.11",
+    "oxfmt": "0.61.0",
+    "oxlint": "1.76.0",
+    "oxlint-tsgolint": "7.0.2001",
+    "typescript": "5.9.3",
+    "vite": "8.2.2"
+  },
+  "type": "module"
+}

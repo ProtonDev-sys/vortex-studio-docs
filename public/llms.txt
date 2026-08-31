@@ -1,0 +1,8 @@
+# Vortex Studio Documentation
+
+> Documentation for the Vortex Studio Luau runtime, engine API, Studio tools, networking, and project format.
+
+- [Documentation](https://vortex.protonn.co.uk/): Datatypes, services, Instances, signals, tasks, tweens, remotes, Studio tooling, and project files.
+- [Full documentation](https://vortex.protonn.co.uk/llms-full.txt): Every reference page and both recovered Luau sources.
+- [Datatype prelude](https://vortex.protonn.co.uk/source/VortexStudio_main_prelude.luau): Recovered Luau definitions for datatypes and enums.
+- [Runtime prelude](https://vortex.protonn.co.uk/source/VortexStudio_runtime_prelude.luau): Recovered Luau definitions for tasks, signals, tweens, and remotes.

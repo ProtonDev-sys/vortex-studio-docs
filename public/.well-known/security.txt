@@ -1,0 +1,4 @@
+Contact: https://vortex.protonn.co.uk/
+Expires: 2027-08-31T00:00:00Z
+Preferred-Languages: en
+Canonical: https://vortex.protonn.co.uk/.well-known/security.txt

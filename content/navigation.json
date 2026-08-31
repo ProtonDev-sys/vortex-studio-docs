@@ -1,0 +1,126 @@
+[
+  {
+    "group": "Getting started",
+    "pages": [
+      {
+        "id": "introduction",
+        "file": "getting-started/introduction.md"
+      },
+      {
+        "id": "execution-model",
+        "file": "getting-started/execution-model.md"
+      }
+    ]
+  },
+  {
+    "group": "Core libraries",
+    "pages": [
+      {
+        "id": "language-environment",
+        "file": "core-libraries/language-environment.md"
+      },
+      {
+        "id": "task-library",
+        "file": "core-libraries/task-library.md"
+      }
+    ]
+  },
+  {
+    "group": "Datatypes",
+    "pages": [
+      {
+        "id": "vector3",
+        "file": "datatypes/vector3.md"
+      },
+      {
+        "id": "color3",
+        "file": "datatypes/color3.md"
+      },
+      {
+        "id": "cframe",
+        "file": "datatypes/cframe.md"
+      },
+      {
+        "id": "enum",
+        "file": "datatypes/enum.md"
+      }
+    ]
+  },
+  {
+    "group": "Runtime",
+    "pages": [
+      {
+        "id": "signals",
+        "file": "runtime/signals.md"
+      },
+      {
+        "id": "tweening",
+        "file": "runtime/tweening.md"
+      }
+    ]
+  },
+  {
+    "group": "Engine API",
+    "pages": [
+      {
+        "id": "services",
+        "file": "engine-api/services.md"
+      },
+      {
+        "id": "instance",
+        "file": "engine-api/instance.md"
+      },
+      {
+        "id": "classes",
+        "file": "engine-api/classes.md"
+      },
+      {
+        "id": "events-input",
+        "file": "engine-api/events-input.md"
+      }
+    ]
+  },
+  {
+    "group": "Networking",
+    "pages": [
+      {
+        "id": "networking",
+        "file": "networking/networking.md"
+      },
+      {
+        "id": "authority",
+        "file": "networking/authority.md"
+      }
+    ]
+  },
+  {
+    "group": "Reference",
+    "pages": [
+      {
+        "id": "limits",
+        "file": "reference/limits.md"
+      },
+      {
+        "id": "studio-executor",
+        "file": "reference/studio-executor.md"
+      },
+      {
+        "id": "project-format",
+        "file": "reference/project-format.md"
+      }
+    ]
+  },
+  {
+    "group": "Recovered source",
+    "pages": [
+      {
+        "id": "main-prelude",
+        "file": "recovered-source/main-prelude.md"
+      },
+      {
+        "id": "runtime-prelude",
+        "file": "recovered-source/runtime-prelude.md"
+      }
+    ]
+  }
+]

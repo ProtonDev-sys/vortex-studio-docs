@@ -1,0 +1,16 @@
+{
+  "name": "Vortex Studio Documentation",
+  "short_name": "Vortex Docs",
+  "description": "Documentation for the Vortex Studio Luau runtime, engine API, Studio tools, networking, and project format.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#202124",
+  "theme_color": "#202124",
+  "icons": [
+    {
+      "src": "/vortex-studio-icon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    }
+  ]
+}
