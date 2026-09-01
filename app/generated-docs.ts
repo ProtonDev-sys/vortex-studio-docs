@@ -25,7 +25,7 @@ export const pages: DocPage[] = [
       },
       {
         "heading": "Version scope",
-        "body": "This reference covers Vortex Studio v0.3.4. Later builds may add or change members."
+        "body": "This reference covers the Vortex Studio build released on 1 September 2026. Later builds may add or change members."
       }
     ]
   },
@@ -802,7 +802,7 @@ export const pages: DocPage[] = [
           },
           {
             "name": "Humanoid",
-            "description": "Character health object with Health, HealthChanged, and Died. Health writes are server-authoritative."
+            "description": "Character health object with Health, MaxHealth, HealthChanged, and Died. Health writes are server-authoritative."
           },
           {
             "name": "HumanoidRootPart",
@@ -878,10 +878,28 @@ export const pages: DocPage[] = [
           {
             "name": "Humanoid.Health: number",
             "description": "Character health. Writes are server-authoritative."
+          },
+          {
+            "name": "Humanoid.MaxHealth: number",
+            "description": "Maximum character health."
           }
         ],
         "code": "local score = Instance.new(\"IntValue\")\nscore.Name = \"Score\"\nscore.Parent = game:GetService(\"ReplicatedStorage\")\n\nscore:GetPropertyChangedSignal(\"Value\"):Connect(function()\n    score:SetAttribute(\"MilestoneReached\", score.Value >= 100)\nend)",
         "note": "Instance.new supports Part, Model, Folder, PointLight, SpotLight, LocalScript, Script, ModuleScript, RemoteEvent, BindableEvent, RemoteFunction, IntValue, and StringValue. Engine-owned roots and character objects are not constructor targets."
+      },
+      {
+        "heading": "BindableEvent",
+        "signatures": [
+          {
+            "name": "event.Event: Signal",
+            "description": "Fires when Fire() is called."
+          },
+          {
+            "name": "event:Fire(...any)",
+            "description": "Fires Event with the supplied values."
+          }
+        ],
+        "code": "local event = Instance.new(\"BindableEvent\")\n\nevent.Event:Connect(function(message)\n    print(message)\nend)\n\nevent:Fire(\"Ready\")"
       }
     ]
   },
@@ -954,14 +972,22 @@ export const pages: DocPage[] = [
           {
             "name": "remote:FireAllClients(...any)",
             "description": "Server -> every client. Calling from a client script raises an error."
+          },
+          {
+            "name": "remote.OnServerEvent: Signal",
+            "description": "Receives FireServer() calls in a Script."
+          },
+          {
+            "name": "remote.OnClientEvent: Signal",
+            "description": "Receives FireClient() and FireAllClients() calls in a LocalScript."
           }
         ],
-        "code": "-- LocalScript\nlocal remote = game:GetService(\"ReplicatedStorage\"):FindFirstChild(\"GameEvent\")\n\nif remote then\n    remote:FireServer(\"Ready\")\nend",
+        "code": "-- LocalScript\nlocal remote = game:GetService(\"ReplicatedStorage\"):FindFirstChild(\"GameEvent\")\n\nif remote then\n    remote.OnClientEvent:Connect(function(...)\n        print(\"Server event received:\", ...)\n    end)\n\n    remote:FireServer(\"Ready\")\nend",
         "exampleTitle": "LocalScript",
         "additionalExamples": [
           {
             "title": "Script",
-            "code": "-- Script\nlocal remote = game:GetService(\"ReplicatedStorage\"):FindFirstChild(\"GameEvent\")\n\nif remote then\n    remote:FireAllClients(\"RoundStarted\", 90)\nend"
+            "code": "-- Script\nlocal remote = game:GetService(\"ReplicatedStorage\"):FindFirstChild(\"GameEvent\")\n\nif remote then\n    remote.OnServerEvent:Connect(function(...)\n        print(\"Client event received:\", ...)\n    end)\n\n    remote:FireAllClients(\"RoundStarted\", 90)\nend"
           }
         ]
       },

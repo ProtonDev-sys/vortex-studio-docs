@@ -9,6 +9,8 @@ RemoteEvent sends messages between client and server. RemoteFunction sends a req
 | `remote:FireServer(...any)` | Client -> server. Calling from a server script raises an error. |
 | `remote:FireClient(playerOrUserId, ...any)` | Server -> one client. Calling from a client script raises an error. |
 | `remote:FireAllClients(...any)` | Server -> every client. Calling from a client script raises an error. |
+| `remote.OnServerEvent: Signal` | Receives `FireServer()` calls in a Script. |
+| `remote.OnClientEvent: Signal` | Receives `FireClient()` and `FireAllClients()` calls in a LocalScript. |
 
 ### LocalScript
 
@@ -17,6 +19,10 @@ RemoteEvent sends messages between client and server. RemoteFunction sends a req
 local remote = game:GetService("ReplicatedStorage"):FindFirstChild("GameEvent")
 
 if remote then
+    remote.OnClientEvent:Connect(function(...)
+        print("Server event received:", ...)
+    end)
+
     remote:FireServer("Ready")
 end
 ```
@@ -28,6 +34,10 @@ end
 local remote = game:GetService("ReplicatedStorage"):FindFirstChild("GameEvent")
 
 if remote then
+    remote.OnServerEvent:Connect(function(...)
+        print("Client event received:", ...)
+    end)
+
     remote:FireAllClients("RoundStarted", 90)
 end
 ```

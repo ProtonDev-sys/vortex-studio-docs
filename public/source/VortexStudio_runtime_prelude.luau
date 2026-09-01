@@ -199,7 +199,8 @@ function __has(key)
 	return existing ~= nil and (#existing._handlers > 0 or #existing._waiting > 0)
 end
 
-function __promote(from, to)
+function __promote(from, to, remoteTo)
+	remoteTo = remoteTo or to
 	local moves = {}
 	for key in pairs(registry) do
 		local rest = key:match("^Changed%.(.+)$")
@@ -214,6 +215,14 @@ function __promote(from, to)
 		if ascope == from then
 			moves[#moves + 1] = { key, "AttrChanged." .. to .. "." .. aname }
 		end
+		local remote = key:match("^RemoteEvent%.(.+)$")
+		if remote == from then
+			moves[#moves + 1] = { key, "RemoteEvent." .. remoteTo }
+		end
+		local bindable = key:match("^Bindable%.(.+)$")
+		if bindable == from then
+			moves[#moves + 1] = { key, "Bindable." .. remoteTo }
+		end
 	end
 	for _, m in ipairs(moves) do
 		local src = registry[m[1]]
@@ -227,6 +236,14 @@ function __promote(from, to)
 				dst._waiting[#dst._waiting + 1] = w
 			end
 			registry[m[1]] = nil
+		end
+	end
+	if __serverInvokeHandlers then
+		local fromKey = "ServerInvoke." .. from
+		local fn = __serverInvokeHandlers[fromKey]
+		if fn then
+			__serverInvokeHandlers["ServerInvoke." .. remoteTo] = fn
+			__serverInvokeHandlers[fromKey] = nil
 		end
 	end
 end
@@ -470,4 +487,3 @@ function __runServerInvoke(key, ...)
 	end
 	return pcall(fn, ...)
 end
-

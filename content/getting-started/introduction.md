@@ -21,4 +21,4 @@ platform.Color = Color3.fromRGB(92, 170, 255)
 
 ## Version scope
 
-This reference covers Vortex Studio v0.3.4. Later builds may add or change members.
+This reference covers the Vortex Studio build released on 1 September 2026. Later builds may add or change members.

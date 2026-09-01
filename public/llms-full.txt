@@ -29,7 +29,7 @@ platform.Color = Color3.fromRGB(92, 170, 255)
 
 #### Version scope
 
-This reference covers Vortex Studio v0.3.4. Later builds may add or change members.
+This reference covers the Vortex Studio build released on 1 September 2026. Later builds may add or change members.
 
 Page: https://vortex.protonn.co.uk/#execution-model
 
@@ -523,7 +523,7 @@ Classes recognized by the native Instance bridge.
 | `Part` | 3D part with Position, Rotation/Orientation, CFrame, Size, Color, Transparency, Anchored, CanCollide, CastShadow, Touched, and TouchEnded. |
 | `PointLight` | Point light Instance. |
 | `SpotLight` | Directional spot light Instance. |
-| `Humanoid` | Character health object with Health, HealthChanged, and Died. Health writes are server-authoritative. |
+| `Humanoid` | Character health object with Health, MaxHealth, HealthChanged, and Died. Health writes are server-authoritative. |
 | `HumanoidRootPart` | Character root part class. |
 
 ```luau
@@ -561,6 +561,7 @@ light.Parent = lamp
 | `StringValue.Value: string` | Stored text value. |
 | `Player.Character: Model?` | The player's current character. |
 | `Humanoid.Health: number` | Character health. Writes are server-authoritative. |
+| `Humanoid.MaxHealth: number` | Maximum character health. |
 
 ```luau
 local score = Instance.new("IntValue")
@@ -574,6 +575,23 @@ end)
 
 > [!NOTE]
 > Instance.new supports Part, Model, Folder, PointLight, SpotLight, LocalScript, Script, ModuleScript, RemoteEvent, BindableEvent, RemoteFunction, IntValue, and StringValue. Engine-owned roots and character objects are not constructor targets.
+
+#### BindableEvent
+
+| Member | Description |
+| --- | --- |
+| `event.Event: Signal` | Fires when `Fire()` is called. |
+| `event:Fire(...any)` | Fires `Event` with the supplied values. |
+
+```luau
+local event = Instance.new("BindableEvent")
+
+event.Event:Connect(function(message)
+    print(message)
+end)
+
+event:Fire("Ready")
+```
 
 Page: https://vortex.protonn.co.uk/#events-input
 
@@ -646,6 +664,8 @@ RemoteEvent sends messages between client and server. RemoteFunction sends a req
 | `remote:FireServer(...any)` | Client -> server. Calling from a server script raises an error. |
 | `remote:FireClient(playerOrUserId, ...any)` | Server -> one client. Calling from a client script raises an error. |
 | `remote:FireAllClients(...any)` | Server -> every client. Calling from a client script raises an error. |
+| `remote.OnServerEvent: Signal` | Receives `FireServer()` calls in a Script. |
+| `remote.OnClientEvent: Signal` | Receives `FireClient()` and `FireAllClients()` calls in a LocalScript. |
 
 ##### LocalScript
 
@@ -654,6 +674,10 @@ RemoteEvent sends messages between client and server. RemoteFunction sends a req
 local remote = game:GetService("ReplicatedStorage"):FindFirstChild("GameEvent")
 
 if remote then
+    remote.OnClientEvent:Connect(function(...)
+        print("Server event received:", ...)
+    end)
+
     remote:FireServer("Ready")
 end
 ```
@@ -665,6 +689,10 @@ end
 local remote = game:GetService("ReplicatedStorage"):FindFirstChild("GameEvent")
 
 if remote then
+    remote.OnServerEvent:Connect(function(...)
+        print("Client event received:", ...)
+    end)
+
     remote:FireAllClients("RoundStarted", 90)
 end
 ```
@@ -1641,7 +1669,8 @@ function __has(key)
 	return existing ~= nil and (#existing._handlers > 0 or #existing._waiting > 0)
 end
 
-function __promote(from, to)
+function __promote(from, to, remoteTo)
+	remoteTo = remoteTo or to
 	local moves = {}
 	for key in pairs(registry) do
 		local rest = key:match("^Changed%.(.+)$")
@@ -1656,6 +1685,14 @@ function __promote(from, to)
 		if ascope == from then
 			moves[#moves + 1] = { key, "AttrChanged." .. to .. "." .. aname }
 		end
+		local remote = key:match("^RemoteEvent%.(.+)$")
+		if remote == from then
+			moves[#moves + 1] = { key, "RemoteEvent." .. remoteTo }
+		end
+		local bindable = key:match("^Bindable%.(.+)$")
+		if bindable == from then
+			moves[#moves + 1] = { key, "Bindable." .. remoteTo }
+		end
 	end
 	for _, m in ipairs(moves) do
 		local src = registry[m[1]]
@@ -1669,6 +1706,14 @@ function __promote(from, to)
 				dst._waiting[#dst._waiting + 1] = w
 			end
 			registry[m[1]] = nil
+		end
+	end
+	if __serverInvokeHandlers then
+		local fromKey = "ServerInvoke." .. from
+		local fn = __serverInvokeHandlers[fromKey]
+		if fn then
+			__serverInvokeHandlers["ServerInvoke." .. remoteTo] = fn
+			__serverInvokeHandlers[fromKey] = nil
 		end
 	end
 end

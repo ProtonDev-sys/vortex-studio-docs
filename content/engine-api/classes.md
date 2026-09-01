@@ -20,7 +20,7 @@ Classes recognized by the native Instance bridge.
 | `Part` | 3D part with Position, Rotation/Orientation, CFrame, Size, Color, Transparency, Anchored, CanCollide, CastShadow, Touched, and TouchEnded. |
 | `PointLight` | Point light Instance. |
 | `SpotLight` | Directional spot light Instance. |
-| `Humanoid` | Character health object with Health, HealthChanged, and Died. Health writes are server-authoritative. |
+| `Humanoid` | Character health object with Health, MaxHealth, HealthChanged, and Died. Health writes are server-authoritative. |
 | `HumanoidRootPart` | Character root part class. |
 
 ```luau
@@ -58,6 +58,7 @@ light.Parent = lamp
 | `StringValue.Value: string` | Stored text value. |
 | `Player.Character: Model?` | The player's current character. |
 | `Humanoid.Health: number` | Character health. Writes are server-authoritative. |
+| `Humanoid.MaxHealth: number` | Maximum character health. |
 
 ```luau
 local score = Instance.new("IntValue")
@@ -71,3 +72,20 @@ end)
 
 > [!NOTE]
 > Instance.new supports Part, Model, Folder, PointLight, SpotLight, LocalScript, Script, ModuleScript, RemoteEvent, BindableEvent, RemoteFunction, IntValue, and StringValue. Engine-owned roots and character objects are not constructor targets.
+
+## BindableEvent
+
+| Member | Description |
+| --- | --- |
+| `event.Event: Signal` | Fires when `Fire()` is called. |
+| `event:Fire(...any)` | Fires `Event` with the supplied values. |
+
+```luau
+local event = Instance.new("BindableEvent")
+
+event.Event:Connect(function(message)
+    print(message)
+end)
+
+event:Fire("Ready")
+```
